@@ -28,7 +28,7 @@ export default function SpellBeee({ easy_words, hard_words }) {
     }
 
     const checkWord = async () => {
-        if (word == words[index]) {
+        if (word.toLowerCase() == words[index]) {
             setCorrect(true)
             await new Promise(r => setTimeout(r, 500));
             next()
