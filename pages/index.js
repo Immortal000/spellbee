@@ -1,65 +1,44 @@
-import Head from 'next/head'
-import styles from '../styles/Home.module.css'
+import styles from "../styles/Home.module.css";
 
-export default function Home() {
+import filter from "../functions/filter";
+
+import SpellBee from "../components/SpellBee";
+import SpellBeee from "../components/SpellBeee";
+import { Button } from "@chakra-ui/react";
+import { useState } from "react";
+
+export default function Home({ easy_words, hard_words }) {
+  const [start, clicked] = useState(false);
+
+  const startBee = () => {
+    console.log(start);
+    if (start) {
+      return;
+    }
+    return;
+  };
   return (
-    <div className={styles.container}>
-      <Head>
-        <title>Create Next App</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
-      <main className={styles.main}>
-        <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h1>
-
-        <p className={styles.description}>
-          Get started by editing{' '}
-          <code className={styles.code}>pages/index.js</code>
+    <div>
+      {/* <SpellBee easy_words={easy_words} medium_words={medium_words} hard_words={hard_words} /> */}
+      <SpellBeee easy_words={easy_words} hard_words={hard_words} />
+      <footer>
+        <p>
+          This eBook is for the use of anyone anywhere in the United States and most other parts of the world at no cost
+          and with almost no restrictions whatsoever. You may copy it, give it away or re-use it under the terms of the
+          Project Gutenberg License included with this eBook or online at www.gutenberg.org. If you are not located in
+          the United States, you will have to check the laws of the country where you are located before using this
+          eBook.
         </p>
-
-        <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h3>Documentation &rarr;</h3>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
-
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h3>Learn &rarr;</h3>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
-
-          <a
-            href="https://github.com/vercel/next.js/tree/master/examples"
-            className={styles.card}
-          >
-            <h3>Examples &rarr;</h3>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
-
-          <a
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-          >
-            <h3>Deploy &rarr;</h3>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
-        </div>
-      </main>
-
-      <footer className={styles.footer}>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{' '}
-          <img src="/vercel.svg" alt="Vercel Logo" className={styles.logo} />
-        </a>
       </footer>
     </div>
-  )
+  );
 }
+
+Home.getInitialProps = async ({ ctx }) => {
+  const data = await fetch("http://localhost:3000/filteredWords.json");
+  const response = await data.json();
+
+  const { easy_words, hard_words } = filter(response);
+
+  return { easy_words, hard_words };
+};
