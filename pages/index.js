@@ -12,7 +12,7 @@ export default function Home({ easy_words, hard_words }) {
 }
 
 Home.getInitialProps = async ({ ctx }) => {
-  const data = await fetch("http://localhost:3000/filteredWords.json");
+  const data = await fetch("https://spellbee.vercel.app/filteredWords.json");
   const response = await data.json();
 
   const { easy_words, hard_words } = filter(response);
