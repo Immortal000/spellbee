@@ -11,9 +11,6 @@ export default function SpellBeee({ easy_words, hard_words }) {
     const [words, setWords] = useState(easy_words)
     const [started, setStarted] = useState(false)
 
-    console.log(words[index])
-
-
     const repeat = () => {
         speak(words[index], 1)
     }
