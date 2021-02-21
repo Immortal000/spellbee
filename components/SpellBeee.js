@@ -1,4 +1,4 @@
-import { Box, Button, Container, Heading, Input, Select, Text, Flex, IconButton, useControllableState } from "@chakra-ui/react";
+import { Box, Button, Container, Heading, Input, Select, Text, Flex, IconButton, useControllableState, Tooltip, useToast } from "@chakra-ui/react";
 import { ArrowRightIcon, ArrowLeftIcon, RepeatClockIcon, TriangleDownIcon, TriangleUpIcon } from "@chakra-ui/icons"
 import { useState, useEffect } from "react";
 import arrayShuffle from "array-shuffle";
@@ -39,12 +39,14 @@ export default function SpellBeee({ easy_words, hard_words }) {
     }
 
     const next = () => {
+        setCorrect(false)
         setIndex(index + 1)
         speak(words[index + 1], 1)
         setWord("")
     }
 
     const previous = () => {
+        setCorrect(false)
         setIndex(index - 1)
         speak(words[index - 1], 1)
         setWord("")
@@ -64,25 +66,56 @@ export default function SpellBeee({ easy_words, hard_words }) {
         }
     }, [level])
 
+    function Toast() {
+        if (correct) {
+            const toast = useToast()
+            return (
+                toast({
+                    position: "bottom-left",
+                    title: "Correct!",
+                    status: "success",
+                    isClosable: true,
+                    duration: 500
+                })
+            )
+        } else {
+            return (
+                null
+            )
+        }
+    }
+
 
     const startBee = () => {
         setStarted(true)
         speak(words[index], 1)
     }
 
+
     const start = () => {
         if (started) {
             return (
-                <Box>
-                    <Heading>Spell Bee</Heading>
-                    <Flex>
-                        <IconButton icon={<TriangleDownIcon />} onClick={() => slower()}></IconButton>
-                        <IconButton icon={<ArrowLeftIcon />} onClick={() => previous()}></IconButton>
-                        <Input placeholder="Enter Word" value={word} _focus="none" _hover="none" borderBottom={correct ? "3px solid green" : "3px solid red"} onChange={(e) => setWord(e.target.value)}></Input>
-                        <IconButton icon={<ArrowRightIcon />} onClick={() => next()}></IconButton>
-                        <IconButton icon={<RepeatClockIcon />} onClick={() => repeat()}></IconButton>
-                    </Flex>
-                </Box >
+                <>
+                    <Box>
+                        <Heading> Spell Bee</Heading>
+                        <Flex>
+                            <Tooltip label="Repeat Slowly">
+                                <IconButton icon={<TriangleDownIcon />} onClick={() => slower()}></IconButton>
+                            </Tooltip>
+                            <Tooltip label="Previous Word">
+                                <IconButton icon={<ArrowLeftIcon />} onClick={() => previous()}></IconButton>
+                            </Tooltip>
+                            <Input placeholder="Enter Word" value={word} _focus="none" _hover="none" borderBottom={correct ? "3px solid green" : "3px solid red"} onChange={(e) => setWord(e.target.value)}></Input>
+                            <Tooltip label="Next Word">
+                                <IconButton icon={<ArrowRightIcon />} onClick={() => next()}></IconButton>
+                            </Tooltip>
+                            <Tooltip label="Repeat Word">
+                                <IconButton icon={<RepeatClockIcon />} onClick={() => repeat()}></IconButton>
+                            </Tooltip>
+                        </Flex>
+                    </Box >
+                    <Toast />
+                </>
             )
         } else {
             return (
