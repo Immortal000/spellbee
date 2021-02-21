@@ -6,7 +6,6 @@ export default function Home({ easy_words, hard_words }) {
   return (
     <div>
       <SpellBeee easy_words={easy_words} hard_words={hard_words} />
-      <footer></footer>
     </div>
   );
 }
